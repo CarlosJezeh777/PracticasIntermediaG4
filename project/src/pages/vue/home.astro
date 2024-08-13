@@ -1,11 +1,24 @@
 ---
 import Pokemon from "../../layouts/Pokemon.astro";
+import { db, Users } from "astro:db";
+import { appStore } from "../../stores";
+const usuarios = await db.select().from(Users);
+
 ---
 
 <Pokemon title="Home">
-  <h1>Home Component</h1>
+  <div class=" bg-orange-500">
+    <h1>Home Component</h1>
+    <ul>
+      {usuarios.map((usuario) => (
+        <li>
+          <p>{usuario.name}</p>
+          <p>{usuario.email}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
 </Pokemon>
-
 <style>
 
 </style>

@@ -69,7 +69,7 @@
     :show="showLoginModal.showLogin"
     @close="showLoginModal.toggleLogin()"
   >
-    <LoginComponent />
+    <LoginComponent :database="props.db" />
   </ModalComponent>
 
   <ModalComponent
@@ -81,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import { appStore } from "../../stores";
 import { useLoginModalStore } from "../../stores/showLogin";
 import { useRegisterModalStore } from "../../stores/showRegister";
@@ -94,9 +94,23 @@ const isMenuOpen = ref(false);
 const showLoginModal = useLoginModalStore(appStore);
 const showRegisterModal = useRegisterModalStore(appStore);
 
+const props = defineProps(["db"]);
+
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
+
+watchEffect(() => {
+  console.log("AppVue watchEffect");
+  console.log(showLoginModal.showLogin);
+  console.log(showRegisterModal.showRegister);
+});
+
+onMounted(()=>{
+  console.log('AppVue mounted');
+  console.log(showLoginModal.showLogin);
+  console.log(showRegisterModal.showRegister);
+});
 </script>
 
 <style scoped></style>

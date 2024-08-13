@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { appStore } from "../../stores";
 import { useLoginModalStore } from "../../stores/showLogin";
 import { useRegisterModalStore } from "../../stores/showRegister";
@@ -45,10 +46,17 @@ import { useRegisterModalStore } from "../../stores/showRegister";
 const showLoginModal = useLoginModalStore(appStore);
 const showRegisterModal = useRegisterModalStore(appStore);
 
+const props = defineProps(["db"]);
+
 const changeToRegister = () => {
   showLoginModal.toggleLogin();
   showRegisterModal.toggleRegister();
 };
+
+onMounted(()=>{
+  console.log("mounted");
+  console.log(props.db);
+});
 </script>
 
 <style scoped></style>

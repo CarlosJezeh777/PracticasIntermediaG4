@@ -24,6 +24,7 @@ const show = useLoginModalStore(appStore);
 const emits = defineEmits(["close"]);
 
 const close = () => {
+  console.log("close");
   emits("close");
 };
 

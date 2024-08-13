@@ -6,6 +6,7 @@ export const useRegisterModalStore = defineStore("showRegister", () => {
 
   const toggleRegister = () => {
     showRegister.value = !showRegister.value;
+    console.log("register value: ",showRegister.value);
   };
 
   return {

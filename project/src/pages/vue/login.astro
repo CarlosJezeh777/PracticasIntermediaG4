@@ -1,13 +1,9 @@
 ---
 import Pokemon from "../../layouts/Pokemon.astro";
+import LoginComponent from "../../components/vue/LoginComponent.vue";
 import { db, Users } from "astro:db";
 
 const users = await db.select().from(Users);
-
-
 ---
 <Pokemon title="Login Component">
-  <div class="bg-green-500">
-    <h1>Hello World from login </h1>
-  </div>
 </Pokemon>

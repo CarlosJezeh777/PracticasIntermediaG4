@@ -8,4 +8,5 @@ import db from "@astrojs/db";
 // https://astro.build/config
 export default defineConfig({
   integrations: [vue(), tailwind(), react(), svelte(), db()],
+  output: 'server'
 });

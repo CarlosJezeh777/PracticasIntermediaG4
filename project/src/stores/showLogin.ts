@@ -6,6 +6,7 @@ export const useLoginModalStore = defineStore("showLogin", () => {
 
   const toggleLogin = () => {
     showLogin.value = !showLogin.value;
+    console.log("login value: ",showLogin.value);
   };
 
   return {
