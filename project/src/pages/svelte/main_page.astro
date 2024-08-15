@@ -1,0 +1,23 @@
+---
+import PokeCatalog from '../../components/svelte/pages/PokeCatalog.svelte';
+
+---
+<script>
+declare global {
+    interface Window { say_hello: any; }
+}
+window.say_hello = (name:string) => {
+  console.log(name+" FROM ASTRO FUNCTION");
+};
+
+</script>
+<main>
+  <PokeCatalog client:load></PokeCatalog>
+
+</main>
+
+<style>
+:root {
+  background-color: #242424;
+}
+</style>
