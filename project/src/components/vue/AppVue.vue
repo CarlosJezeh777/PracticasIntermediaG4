@@ -2,9 +2,11 @@
   <header class="bg-slate-600 m-2 p-1">
     <nav class="flex items-center justify-between flex-wrap p-3">
       <div class="flex items-center flex-shrink-0 text-white mr-6">
-        <span class="font-semibold text-xl tracking-tight"
-          >Image<strong>S</strong></span
-        >
+        <a href="/">
+          <span class="font-semibold text-xl tracking-tight"
+            >Image<strong>S</strong></span
+          >
+        </a>
       </div>
       <div class="block lg:hidden">
         <button
@@ -50,13 +52,13 @@
 
         <div>
           <button
-            @click="showLoginModal.toggleLogin()"
+            @click="toggleLogin()"
             class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400 mr-4"
           >
             Login
           </button>
           <button
-            @click="showRegisterModal.toggleRegister()"
+            @click="toggleRegister()"
             class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400"
           >
             Register
@@ -65,51 +67,46 @@
       </div>
     </nav>
   </header>
-  <ModalComponent
-    :show="showLoginModal.showLogin"
-    @close="showLoginModal.toggleLogin()"
-  >
-    <LoginComponent :database="props.db" />
+  <ModalComponent :show="showLoginModal" @close="toggleLogin()">
+    <LoginComponent @change="change()" />
   </ModalComponent>
 
-  <ModalComponent
-    :show="showRegisterModal.showRegister"
-    @close="showRegisterModal.toggleRegister()"
-  >
-    <RegisterComponent />
+  <ModalComponent :show="showRegisterModal" @close="toggleRegister()">
+    <RegisterComponent @change="change()" />
   </ModalComponent>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from "vue";
-import { appStore } from "../../stores";
-import { useLoginModalStore } from "../../stores/showLogin";
-import { useRegisterModalStore } from "../../stores/showRegister";
+import { onMounted, ref } from "vue";
 
 import ModalComponent from "../vue/ModalComponent.vue";
 import LoginComponent from "../vue/LoginComponent.vue";
 import RegisterComponent from "../vue/RegisterComponent.vue";
 
 const isMenuOpen = ref(false);
-const showLoginModal = useLoginModalStore(appStore);
-const showRegisterModal = useRegisterModalStore(appStore);
+const showLoginModal = ref(false);
+const showRegisterModal = ref(false);
 
-const props = defineProps(["db"]);
+const toggleLogin = () => {
+  showLoginModal.value = !showLoginModal.value;
+};
+
+const toggleRegister = () => {
+  showRegisterModal.value = !showRegisterModal.value;
+};
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
 
-watchEffect(() => {
-  console.log("AppVue watchEffect");
-  console.log(showLoginModal.showLogin);
-  console.log(showRegisterModal.showRegister);
-});
+const change = () => {
+  showLoginModal.value = !showLoginModal.value;
+  showRegisterModal.value = !showRegisterModal.value;
+};
 
-onMounted(()=>{
-  console.log('AppVue mounted');
-  console.log(showLoginModal.showLogin);
-  console.log(showRegisterModal.showRegister);
+onMounted(async () => {
+  console.log("AppVue mounted");
+  // console.log(props);
 });
 </script>
 

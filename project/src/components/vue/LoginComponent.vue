@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="text-xl mb-4">Login</h2>
-    <form>
+    <form method="POST" action="/api/login">
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="username"
           >Username</label
@@ -10,6 +10,7 @@
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
           id="username"
           type="text"
+          name="username"
           placeholder="Username"
         />
       </div>
@@ -21,10 +22,12 @@
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3"
           id="password"
           type="password"
+          name="password"
           placeholder="******************"
         />
       </div>
       <div class="flex items-center justify-between">
+        <button type="submit">Confirm</button>
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           type="button"
@@ -38,25 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { appStore } from "../../stores";
-import { useLoginModalStore } from "../../stores/showLogin";
-import { useRegisterModalStore } from "../../stores/showRegister";
-
-const showLoginModal = useLoginModalStore(appStore);
-const showRegisterModal = useRegisterModalStore(appStore);
-
-const props = defineProps(["db"]);
+const emits = defineEmits(["change"]);
 
 const changeToRegister = () => {
-  showLoginModal.toggleLogin();
-  showRegisterModal.toggleRegister();
+  emits("change");
 };
-
-onMounted(()=>{
-  console.log("mounted");
-  console.log(props.db);
-});
 </script>
 
 <style scoped></style>

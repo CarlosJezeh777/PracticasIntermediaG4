@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useServicesStore } from "./services";
+// import { db, Users } from "astro:db";
 
 export const useUtilsStore = defineStore("utils", () => {
   const services = useServicesStore();
@@ -46,5 +47,11 @@ export const useUtilsStore = defineStore("utils", () => {
     return response;
   };
 
-  return { isDark, getImagesFromPokeAPI, baseConfig, changeBaseUrl, name1 };
+  return {
+    isDark,
+    getImagesFromPokeAPI,
+    baseConfig,
+    changeBaseUrl,
+    name1,
+  };
 });

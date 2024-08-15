@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="text-xl mb-4">Register</h2>
-    <form>
+    <form method="POST" action="/api/register">
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="username"
           >Username</label
@@ -9,6 +9,7 @@
         <input
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
           id="username"
+          name="username"
           type="text"
           placeholder="Username"
         />
@@ -20,6 +21,7 @@
         <input
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
           id="email"
+          name="email"
           type="email"
           placeholder="Email"
         />
@@ -31,11 +33,13 @@
         <input
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3"
           id="password"
+          name="password"
           type="password"
           placeholder="******************"
         />
       </div>
       <div class="flex items-center justify-between">
+        <button type="submit">Confirm</button>
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           type="button"
@@ -49,16 +53,10 @@
 </template>
 
 <script setup lang="ts">
-import { appStore } from "../../stores";
-import { useLoginModalStore } from "../../stores/showLogin";
-import { useRegisterModalStore } from "../../stores/showRegister";
-
-const showLoginModal = useLoginModalStore(appStore);
-const showRegisterModal = useRegisterModalStore(appStore);
+const emits = defineEmits(["change"]);
 
 const changeToRegister = () => {
-  showLoginModal.toggleLogin();
-  showRegisterModal.toggleRegister();
+  emits("change");
 };
 </script>
 

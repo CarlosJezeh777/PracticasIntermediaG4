@@ -1,8 +1,11 @@
 ---
 import Pokemon from "../../layouts/Pokemon.astro";
 import SearchComponent from "../../components/vue/SearchComponent.vue";
+import { db, Pokemons } from "astro:db";
+const pokemons = await db.select().from(Pokemons).all();
+
 ---
 
 <Pokemon title="Pokemon Library">
-  <SearchComponent client:visible/>
+  <SearchComponent client:visible pokemones={pokemons}/>
 </Pokemon>

@@ -66,9 +66,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import { appStore } from "../../stores";
-import { useImagesStore } from "../../stores/images";
-import { useUtilsStore } from "../../stores/utils";
+import { appStore } from "@/stores";
+import { useImagesStore } from "@/stores/images";
+import { useUtilsStore } from "@/stores/utils";
+import { testStore } from "@/stores/testStore";
+
+const props = defineProps(["pokemones"]);
 
 const useImages = useImagesStore(appStore);
 const utils = useUtilsStore(appStore);

@@ -5,8 +5,11 @@ import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
 import db from "@astrojs/db";
 
+import vercel from "@astrojs/vercel/serverless";
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [vue(), tailwind(), react(), svelte(), db()],
-  output: 'server'
+  output: 'server',
+  adapter: vercel()
 });

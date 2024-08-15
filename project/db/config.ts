@@ -1,22 +1,33 @@
 import { defineDb, defineTable, column } from "astro:db";
 
-const Users = defineTable({
+const User = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
-    name: column.text(),
-    passwd: column.text(),
-    email: column.text({ optional: true }),
+    id: column.text({ primaryKey: true, optional: false, unique: true }),
+    username: column.text({ optional: false, unique: true }),
+    password: column.text({ optional: false }),
+    email: column.text({ optional: true, unique: true }),
   },
 });
 
-const Images = defineTable({
+const Session = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
-    userId: column.number({ references: () => Users.columns.id }),
-    url: column.text(),
+    id: column.text({ optional: false, unique: true }),
+    userId: column.text({
+      optional: false,
+      references: () => User.columns.id,
+    }),
+    expiresAt: column.text({ optional: false }),
+  },
+});
+
+const Pokemons = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true, optional: false, unique: true }),
+    name: column.text({ optional: false, unique: true }),
+    image: column.text({ optional: false }),
   },
 });
 
 export default defineDb({
-  tables: { Users, Images },
+  tables: { User, Session, Pokemons },
 });
