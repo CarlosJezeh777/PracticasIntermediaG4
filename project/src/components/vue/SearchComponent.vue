@@ -47,15 +47,14 @@
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4"
     >
       <div
-        v-for="img in useImages.images"
-        :key="img[1].id"
-        @click="changeToImageView(img[0])"
-        href="/vue/image"
+        v-for="img in sortedImages"
+        :key="img.id"
+        @click="changeToImageView(img.id)"
         class="rounded overflow-hidden shadow-lg flex flex-col items-center justify-around bg-slate-600 hover:cursor-pointer hover:bg-slate-500"
       >
-        <p class="text-center text-white">{{ img[1].name.toUpperCase() }}</p>
+        <p class="text-center text-white">{{ img.name.toUpperCase() }}</p>
         <img
-          :src="img[1].getFile('front_default')"
+          :src="img.sprites.get('front_default')"
           alt="image"
           class="w-full h-25"
         />
@@ -65,90 +64,77 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
-import { appStore } from "@/stores";
-import { useImagesStore } from "@/stores/images";
-import { useUtilsStore } from "@/stores/utils";
-import { testStore } from "@/stores/testStore";
+import { ref, computed, onMounted } from "vue";
 
-const props = defineProps(["pokemones"]);
-
-const useImages = useImagesStore(appStore);
-const utils = useUtilsStore(appStore);
-const pokemones = ref(["bulbasaur", "squirtle", "charmander"]);
 const pokemonName = ref("");
+const pokemones = ref(["bulbasaur", "squirtle", "charmander"]);
+const images = ref<any[]>([]);
+
+// Ordena los Pokémon en base a su ID de menor a mayor
+const sortedImages = computed(() => {
+  return images.value.sort((a, b) => a.id - b.id);
+});
 
 const changeToImageView = (id: number) => {
-  useImages.setCurrentImage(id);
+  console.log("Selected Pokémon ID:", id);
 };
 
-const searchPokemon = () => {
-  if (pokemonName.value in pokemones.value) {
+const searchPokemon = async () => {
+  if (pokemonName.value === "" || pokemones.value.includes(pokemonName.value)) {
     return;
   }
-  if (pokemonName.value !== "") {
-    pokemones.value.push(pokemonName.value);
-  }
 
-  if (pokemones.value.length > 0) {
-    pokemones.value.forEach(async (pokemon) => {
-      try {
-        const success = await loadImages(pokemon);
-        if (!success) {
-          // Elimina el Pokémon de la lista si no se encontró ninguna imagen
-          pokemones.value = pokemones.value.filter((p) => p !== pokemon);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    });
+  pokemones.value.push(pokemonName.value);
+
+  const success = await loadImages(pokemonName.value);
+  if (!success) {
+    pokemones.value = pokemones.value.filter((p) => p !== pokemonName.value);
   }
 
   pokemonName.value = "";
 };
 
-// Cada vez que se agregue un nuevo pokemon a la lista, se cargan las imágenes
-watch(pokemones, (newValue) => {
-  useImages.sortImages();
-  newValue.forEach((pokemon) => {
-    loadImages(pokemon);
-  });
-});
-
 const loadImages = async (pokemon: string): Promise<boolean> => {
-  if (pokemon === "") return false;
   try {
-    const image: any = await utils.getImagesFromPokeAPI(pokemon);
+    const response = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/${pokemon}`
+    );
+    const image = await response.json();
 
     if (!image || !image.id) {
-      // No se encontró la imagen
       return false;
     }
 
-    const id: number = image?.id || -1;
-    const name: string = image?.name || "";
-    let sprites: Map<string, string> = new Map<string, string>();
+    const id = image.id;
+    const name = image.name;
+    const sprites = new Map<string, string>();
 
     Object.keys(image.sprites).forEach((key) => {
-      image.sprites[key] != null && typeof image.sprites[key] === "string"
-        ? sprites.set(key, image.sprites[key])
-        : null;
+      if (
+        image.sprites[key] != null &&
+        typeof image.sprites[key] === "string"
+      ) {
+        sprites.set(key, image.sprites[key]);
+      }
     });
 
-    const file: { [key: string]: string } = image?.sprites || {};
-    const fileMap = new Map<string, string>(Object.entries(file));
+    const pokemonExists = images.value.some((img) => img.id === id);
+    if (!pokemonExists) {
+      images.value.push({ id, name, sprites });
+    }
 
-    useImages.addImage(id, name, fileMap);
-    return true; // Indica que la carga de la imagen fue exitosa
+    return true;
   } catch (error) {
     console.log(error);
-    return false; // Indica que hubo un error o no se encontraron imágenes
+    return false;
   }
 };
 
+// Cargar las imágenes iniciales cuando se monta el componente
 onMounted(async () => {
-  useImages.clearImages();
-  searchPokemon();
+  for (const pokemon of pokemones.value) {
+    await loadImages(pokemon);
+  }
 });
 </script>
 

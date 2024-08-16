@@ -12,7 +12,7 @@ export async function POST(context: APIContext): Promise<Response> {
   const email = formData.get("email");
 
   if (!username || !password) {
-    return new Response("Username or Password are required", { status: 400 });
+    return new Response("Username and Password are required", { status: 400 });
   }
 
   if (typeof username !== "string" || username.length < 4) {

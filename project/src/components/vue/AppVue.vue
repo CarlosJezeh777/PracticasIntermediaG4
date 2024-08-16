@@ -38,16 +38,6 @@
             class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400 mr-4"
             >Library</a
           >
-          <!-- <a
-            href="/vue/image"
-            class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400 mr-4"
-            >Image</a
-          >
-          <a
-            href="/vue/profile"
-            class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400"
-            >Profile</a
-          > -->
         </div>
 
         <div v-if="props.logged !== true">
@@ -116,14 +106,8 @@ const change = () => {
   showRegisterModal.value = !showRegisterModal.value;
 };
 
-const logout = () => {
-  window.location.href = "/api/signout";
-};
-
 onMounted(async () => {
   console.log("AppVue mounted");
-  console.log(props);
-  // console.log(props);
 });
 </script>
 
