@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-auto bg-slate-100">
+  <div class="w-full h-auto bg-slate-900">
     <div class="max-w-md mx-auto">
       <label
         for="pokemon-search"

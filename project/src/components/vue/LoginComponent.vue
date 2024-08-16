@@ -26,8 +26,13 @@
           placeholder="******************"
         />
       </div>
-      <div class="flex items-center justify-between">
-        <button type="submit">Confirm</button>
+      <div class="flex items-center justify-between gap-2">
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Confirm
+        </button>
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           type="button"

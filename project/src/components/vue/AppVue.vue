@@ -38,7 +38,7 @@
             class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400 mr-4"
             >Library</a
           >
-          <a
+          <!-- <a
             href="/vue/image"
             class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400 mr-4"
             >Image</a
@@ -47,10 +47,10 @@
             href="/vue/profile"
             class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400"
             >Profile</a
-          >
+          > -->
         </div>
 
-        <div>
+        <div v-if="props.logged !== true">
           <button
             @click="toggleLogin()"
             class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400 mr-4"
@@ -63,6 +63,16 @@
           >
             Register
           </button>
+        </div>
+        <div v-else>
+          <form action="/api/signout" method="POST">
+            <button
+              type="submit"
+              class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-400"
+            >
+              Logout
+            </button>
+          </form>
         </div>
       </div>
     </nav>
@@ -82,6 +92,8 @@ import { onMounted, ref } from "vue";
 import ModalComponent from "../vue/ModalComponent.vue";
 import LoginComponent from "../vue/LoginComponent.vue";
 import RegisterComponent from "../vue/RegisterComponent.vue";
+
+const props = defineProps(["logged"]);
 
 const isMenuOpen = ref(false);
 const showLoginModal = ref(false);
@@ -104,8 +116,13 @@ const change = () => {
   showRegisterModal.value = !showRegisterModal.value;
 };
 
+const logout = () => {
+  window.location.href = "/api/signout";
+};
+
 onMounted(async () => {
   console.log("AppVue mounted");
+  console.log(props);
   // console.log(props);
 });
 </script>

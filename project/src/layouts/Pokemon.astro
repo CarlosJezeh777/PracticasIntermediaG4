@@ -1,14 +1,18 @@
 ---
-import { User } from 'astro:db';
 import AppVue from '../components/vue/AppVue.vue';
-import { db } from 'astro:db';
+import { db, eq, User } from 'astro:db';
+
 interface Props {
   title: string;
 }
 
 const {title} = Astro.props;
 
-const users = await db.select().from(User);
+const currentUser = Astro.locals.user;
+let users;
+if (currentUser) {
+	users = await db.select().from(User).where(eq(User.id, currentUser?.id));
+}
 ---
 
 <!doctype html>
@@ -22,17 +26,16 @@ const users = await db.select().from(User);
 		<title>{title}</title>
 	</head>
 	<body>
-    <AppVue client:load />
+    <AppVue client:load logged={users != null}/>
 		<div class=" bg-slate-500 mx-2">
-			<h1>Home Component</h1>
-			<ul>
+			<!-- <ul>
 				<li>User | Email</li>
 				{
-					users.map((user) => (
+					users?.map((user) => (
 						<li>{user.username} | {user.email}</li>
 					))
 				}
-			</ul>
+			</ul> -->
 		</div>
 		<slot />
 	</body>

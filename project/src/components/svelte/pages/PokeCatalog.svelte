@@ -78,7 +78,9 @@
 
 <main>
     <div class="main-container">
-        <h1 id="page-title">Pokemon Catalogue</h1>
+        <a href="/" style="text-decoration: none;">
+            <h1 id="page-title">Pokemon Catalogue</h1>
+        </a>
         <div class="search-bar-container">
             <label for="pokemon-search-input">Filter by name</label>
             <input
